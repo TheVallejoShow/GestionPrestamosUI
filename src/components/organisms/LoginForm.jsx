@@ -1,6 +1,6 @@
+import ErrorMessage from "../atoms/ErrorMessage";
 import FormField from "../molecules/FormField";
 import BtnLogin from "../atoms/BtnLogin";
-import ErrorMessage from "../atoms/ErrorMessage";
 
 export default function LoginForm ({ email, setEmail, password, setPassword, onSubmit, error, loading }) {
   return (
