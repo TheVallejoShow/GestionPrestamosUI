@@ -6,23 +6,38 @@ const mockUsers = [
 ];
 
 export default function useAuth() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const login = (email, password) =>
-    new Promise((resolve, reject) => {
-      setLoading(true);
-      setTimeout(() => {
-        const user = mockUsers.find(
-          (u) => u.email === email && u.password === password
-        );
-        setLoading(false);
-        if (user) {
-          resolve(user);
-        } else {
-          reject(new Error("Correo o contraseña incorrectos"));
-        }
-      }, 1000);
-    });
+  const login = async (email, password) => {
+    setLoading(true);
+    try {
+      const foundUser = mockUsers.find(
+        (user) => user.email === email && user.password === password
+      );
 
-  return { login, loading };
+      if (foundUser) {
+        setIsAuthenticated(true);
+        setCurrentUser(foundUser);
+      } else {
+        throw new Error("Credenciales inválidas");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+  };
+
+  return {
+    login,
+    logout,
+    isAuthenticated,
+    currentUser,
+    loading,
+  };
 }

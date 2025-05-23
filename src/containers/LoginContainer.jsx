@@ -1,8 +1,8 @@
 import LoginForm from "../components/organisms/LoginForm";
 
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginContainer () {
@@ -10,7 +10,7 @@ export default function LoginContainer () {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const { login, loading } = useAuth();
+  const { login, loading, isAuthenticated } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,6 +22,12 @@ export default function LoginContainer () {
       setError(err?.response?.data?.message || "Credenciales inválidas");
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <LoginForm

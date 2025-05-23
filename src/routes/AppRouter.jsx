@@ -1,15 +1,23 @@
-import LoginContainer from "../containers/LoginContainer";
+import LoginContainer from "../containers/LoginContainer"
 import Home from "../components/pages/Home";
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import PrivateRoute from "../routes/PrivateRoute";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginContainer />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<LoginContainer />} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
