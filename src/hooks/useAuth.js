@@ -7,37 +7,25 @@ const mockUsers = [
 
 export default function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const login = async (email, password) => {
     setLoading(true);
     try {
       const foundUser = mockUsers.find(
-        (user) => user.email === email && user.password === password
+        (u) => u.email === email && u.password === password
       );
-
-      if (foundUser) {
-        setIsAuthenticated(true);
-        setCurrentUser(foundUser);
-      } else {
+      if (!foundUser) {
         throw new Error("Credenciales inválidas");
       }
+      setIsAuthenticated(true);
+      setUser(foundUser);
+      return foundUser;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    setCurrentUser(null);
-  };
-
-  return {
-    login,
-    logout,
-    isAuthenticated,
-    currentUser,
-    loading,
-  };
+  return { login, loading, isAuthenticated, user };
 }
